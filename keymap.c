@@ -7,40 +7,53 @@
  * edit it directly.
  */
 
+// // Tap dance.
+//
+
+enum tap_dance {
+	TD_CTRL_CAPS,
+	TD_LGUI_LALT,
+	TD_RGUI_RALT,
+};
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+	// Tap once for Control, twice for Caps Lock.
+	[TD_CTRL_CAPS] = ACTION_TAP_DANCE_DOUBLE(KC_LCTL, KC_CAPS),
+	// Tap once for Gui, twice for alt.
+	[TD_LGUI_LALT] = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, KC_LALT),
+	// Tap once for Gui, twice for alt.
+	[TD_RGUI_RALT] = ACTION_TAP_DANCE_DOUBLE(KC_RGUI, KC_RALT)
+};
+
+//
+// Layers
+//
+
 enum layers {
 	COLEMAK_0,
 	COLEMAK_1,
 	QWERTY,
 	HHKB_FN,
 	SPACE_FN,
+	FN,
 	OTHER
 };
-
-enum custom_keycodes {
-	LT_CUSTOM = 0x7100,
-};
-
-enum tap_dance {
-	TEST
-};
-
-bool layer_interrupted = false;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	// colemak 
 	[COLEMAK_0] = LAYOUT_60_hhkb(
 KC_ESC,				KC_1,	KC_2,	KC_3,	KC_4,	KC_5,	KC_6,	KC_7,	KC_8,	KC_9,	KC_0,		KC_MINS,	KC_EQL,		KC_BSLS,	KC_GRV,	\
 KC_TAB,				KC_Q,	KC_W,	KC_F,	KC_P,	KC_G,	KC_J,	KC_L,	KC_U,	KC_Y,	KC_SCLN,	KC_LBRC,	KC_RBRC,	KC_BSPC,	\
-LCTL_T(KC_CAPS),	KC_A,	KC_R,	KC_S,	KC_T,	KC_D,	KC_H,	KC_N,	KC_E,	KC_I,	KC_O,		KC_QUOT,	KC_ENT,	\
-KC_LSFT,			KC_Z,	KC_X,	KC_C,	KC_V,	KC_B,	KC_K,	KC_M,	KC_COMM,KC_DOT,	KC_SLSH,	KC_RSFT,	TT(HHKB_FN),	\
-KC_LALT,	KC_LGUI,	LT(SPACE_FN, KC_SPC),	KC_RGUI,	KC_RALT
+TD(TD_CTRL_CAPS),	KC_A,	KC_R,	KC_S,	KC_T,	KC_D,	KC_H,	KC_N,	KC_E,	KC_I,	KC_O,		KC_QUOT,	KC_ENT,	\
+KC_LSFT,			KC_Z,	KC_X,	KC_C,	KC_V,	KC_B,	KC_K,	KC_M,	KC_COMM,KC_DOT,	KC_SLSH,	KC_RSFT,	MO(HHKB_FN),	\
+MO(FN),	TD(TD_LGUI_LALT),	LT(SPACE_FN, KC_SPC),	TD(TD_RGUI_RALT),	MO(FN)	
 			),
 	// colemak with out tap/hold layers
 	[COLEMAK_1] = LAYOUT_60_hhkb(
 KC_ESC,		KC_1,	KC_2,	KC_3,	KC_4,	KC_5,	KC_6,	KC_7,	KC_8,	KC_9,	KC_0,		KC_MINS,	KC_EQL,		KC_BSLS,	KC_GRV,	\
 KC_TAB,		KC_Q,	KC_W,	KC_F,	KC_P,	KC_G,	KC_J,	KC_L,	KC_U,	KC_Y,	KC_SCLN,	KC_LBRC,	KC_RBRC,	KC_BSPC,	\
 KC_LCTL,	KC_A,	KC_R,	KC_S,	KC_T,	KC_D,	KC_H,	KC_N,	KC_E,	KC_I,	KC_O,		KC_QUOT,	KC_ENT,	\
-KC_LSFT,	KC_Z,	KC_X,	KC_C,	KC_V,	KC_B,	KC_K,	KC_M,	KC_COMM,KC_DOT,	KC_SLSH,	KC_RSFT,	TT(HHKB_FN),	\
+KC_LSFT,	KC_Z,	KC_X,	KC_C,	KC_V,	KC_B,	KC_K,	KC_M,	KC_COMM,KC_DOT,	KC_SLSH,	KC_RSFT,	MO(HHKB_FN),	\
 KC_LALT,	KC_LGUI,	KC_SPC,	KC_RGUI,	KC_RALT
 			),
 	// qwerty
@@ -48,7 +61,7 @@ KC_LALT,	KC_LGUI,	KC_SPC,	KC_RGUI,	KC_RALT
 KC_ESC,		KC_1,	KC_2,	KC_3,	KC_4,	KC_5,	KC_6,	KC_7,	KC_8,	KC_9,	KC_0,		KC_MINS,	KC_EQL,		KC_BSLS,	KC_GRV,	\
 KC_TAB,		KC_Q,	KC_W,	KC_E,	KC_R,	KC_T,	KC_Y,	KC_U,	KC_I,	KC_O,	KC_P,		KC_LBRC,	KC_RBRC,	KC_BSPC,	\
 KC_LCTL,	KC_A,	KC_S,	KC_D,	KC_F,	KC_G,	KC_H,	KC_J,	KC_K,	KC_L,	KC_SCLN,	KC_QUOT,	KC_ENT,	\
-KC_LSFT,	KC_Z,	KC_X,	KC_C,	KC_V,	KC_B,	KC_N,	KC_M,	KC_COMM,KC_DOT,	KC_SLSH,	KC_RSFT,	TT(HHKB_FN),	\
+KC_LSFT,	KC_Z,	KC_X,	KC_C,	KC_V,	KC_B,	KC_N,	KC_M,	KC_COMM,KC_DOT,	KC_SLSH,	KC_RSFT,	MO(HHKB_FN),	\
 KC_LALT,	KC_LGUI,	KC_SPC,	KC_RGUI,	KC_RALT
 			),
 	// hhkb fn layer
@@ -61,9 +74,16 @@ KC_TRNS,	KC_TRNS,	KC_TRNS,	MO(OTHER),	KC_TRNS	\
 			),
 	// spacefn
 	[SPACE_FN] = LAYOUT_60_hhkb(
+KC_TRNS,	KC_F1,		KC_F2,			KC_F3,		KC_F4,		KC_F5,			KC_F6,		KC_F7,		KC_F8,		KC_F9,		KC_F10,		KC_F11,		KC_F12,		KC_TRNS,	KC_TRNS,	\
+KC_TRNS,	KC_TRNS,	LCTL(KC_RGHT),	KC_TRNS,	KC_TRNS,	KC_TRNS,		KC_HOME,	KC_PGDN,	KC_PGUP,	KC_END,		KC_PIPE,	KC_TILD,	KC_TRNS,	KC_DEL,	\
+KC_TRNS,	KC_TRNS,	KC_TRNS,		KC_TRNS,	KC_TRNS,	KC_TRNS,		KC_LEFT,	KC_DOWN,	KC_UP,		KC_RGHT,	KC_BSLS,	KC_GRV,		KC_TRNS,	\
+KC_TRNS,	KC_TRNS,	KC_TRNS,		KC_TRNS,	KC_TRNS,	LCTL(KC_LEFT),	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	\
+KC_TRNS,	KC_TRNS,	KC_TRNS,		KC_TRNS,	KC_TRNS
+			),
+	[FN] = LAYOUT_60_hhkb(
 KC_TRNS,	KC_F1,		KC_F2,		KC_F3,		KC_F4,		KC_F5,		KC_F6,		KC_F7,		KC_F8,		KC_F9,		KC_F10,		KC_F11,		KC_F12,		KC_TRNS,	KC_TRNS,	\
-KC_TRNS,	KC_UNDS,	KC_PLUS,	KC_LPRN,	KC_RPRN,	KC_TRNS,	KC_PGUP,	KC_HOME,	KC_UP,		KC_END,		KC_PIPE,	KC_TILD,	KC_TRNS,	KC_DEL,	\
-KC_TRNS,	KC_MINS,	KC_EQL,		KC_LCBR,	KC_RCBR,	KC_TRNS,	KC_PGDN,	KC_LEFT,	KC_DOWN,	KC_RGHT,	KC_BSLS,	KC_GRV,		KC_TRNS,	\
+KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_LPRN,	KC_RPRN,	KC_TRNS,	KC_TRNS,	KC_PIPE,	KC_TILD,	KC_UNDS,	KC_PLUS,	KC_TRNS,	KC_TRNS,	KC_DEL,	\
+KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_LCBR,	KC_RCBR,	KC_TRNS,	KC_TRNS,	KC_BSLS,	KC_GRV,		KC_MINS,	KC_EQL,		KC_TRNS,	KC_TRNS,	\
 KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_LBRC,	KC_RBRC,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	\
 KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS
 			),
@@ -77,27 +97,17 @@ KC_NO,	KC_NO,	KC_NO,	KC_NO,	KC_NO
 			)
 };
 
-// custom keycode behavior
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+//
+// Functions
+//
+
+// RETRO_TAPPING_PER_KEY
+bool get_retro_tapping(uint16_t keycode, keyrecord_t *record) { 
 	switch(keycode) {
-		// Alternate space fn LT layer for faster symbols.
-		// Does not work well for regular typing at the moment.
-		case LT_CUSTOM: 
-			if (record->event.pressed) {
-				layer_interrupted = false;
-				layer_on(SPACE_FN);
-			} else {
-				if (!layer_interrupted) {
-					register_code(KC_SPC);
-					unregister_code(KC_SPC);
-				}
-				layer_off(SPACE_FN);
-			}
+		case LT(SPACE_FN, KC_SPACE):
+			return true;
+		default:
 			return false;
-			break;
-		default: 
-			layer_interrupted = true;
-			break;
 	}
-	return true;
 }
