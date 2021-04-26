@@ -34,13 +34,12 @@ enum layers {
 	COLEMAK_1,
 	QWERTY,
 	HHKB_FN,
-	SPACE_FN,
 	FN,
 	OTHER
 };
 
 enum keycodes {
-	K_COLEMAK_0,
+	K_COLEMAK_0 = SAFE_RANGE,
 	K_COLEMAK_1,
 	K_QWERTY
 };
@@ -78,14 +77,6 @@ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_HOME,
 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_END,  KC_PGDN, KC_DOWN, KC_TRNS, KC_TRNS, \
 KC_TRNS, KC_TRNS, KC_TRNS, MO(OTHER), KC_TRNS \
 			),
-	// spacefn
-	[SPACE_FN] = LAYOUT_60_hhkb(
-KC_TRNS, KC_F1,  KC_F2,   KC_F3,  KC_F4,  KC_F5,   KC_F6,  KC_F7,  KC_F8,  KC_F9,  KC_F10,  KC_F11,  KC_F12,  KC_TRNS, KC_TRNS, \
-KC_TRNS, KC_TRNS, LCTL(KC_RGHT), KC_TRNS, KC_TRNS, KC_TRNS,  KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_PIPE, KC_TILD, KC_TRNS, KC_DEL, \
-KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS,  KC_LEFT, KC_DOWN, KC_UP,  KC_RGHT, KC_BSLS, KC_GRV,  KC_TRNS, \
-KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, LCTL(KC_LEFT), KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, \
-KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS
-			),
 	[FN] = LAYOUT_60_hhkb(
 KC_TRNS, KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,  KC_F7,  KC_F8,  KC_F9,  KC_F10,  KC_F11,  KC_F12,  KC_TRNS, KC_TRNS, \
 KC_TRNS, KC_TRNS, KC_TRNS, KC_LPRN, KC_RPRN, KC_TRNS, KC_TRNS, KC_PIPE, KC_TILD, KC_UNDS, KC_PLUS, KC_TRNS, KC_TRNS, KC_DEL, \
@@ -115,19 +106,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				set_single_persistent_default_layer(COLEMAK_0);
 			}
 			return false;
-			break;
 		case K_COLEMAK_1:
 			if (record->event.pressed) {
 				set_single_persistent_default_layer(COLEMAK_1);
 			}
 			return false;
-			break;
 		case K_QWERTY:
 			if (record->event.pressed) {
 				set_single_persistent_default_layer(QWERTY);
 			}
 			return false;
-			break;
 	}
 	return true;
 }
